@@ -25,6 +25,7 @@
     }
 
     body {
+      display: table;
       margin: 0 auto;
       width: 100%;
       height: 100vh;
@@ -34,10 +35,9 @@
     }
 
     main {
-      flex: 1;
-      display: flex;
-      overflow: auto;
       height: 100%;
+      display: table-cell;
+      vertical-align: middle;
     }
 
     button {
@@ -56,13 +56,7 @@
 
     /* CONTENT STYLE */
     .content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-      overflow-y: scroll;
+      overflow: auto;
     }
 
     /* TITLE STYLE */
@@ -92,10 +86,12 @@
       display: flex;
       flex-flow: column wrap;
       justify-content: center;
+      align-items: center;
       border-radius: 4px;
       min-height: 60px;
       padding: 2px 5px 2px 5px;
-
+      margin-right: 2em;
+      margin-left: 2em;
     }
 
     .grid-table {
@@ -126,9 +122,8 @@
     .controller-div {
       display: flex;
       flex-direction: row;
-      justify-content: space-evenly;
+      justify-content: center;
       align-items: center;
-      width: 40%;
       min-height: 40px;
       max-height: 40px;
       margin-top: 1em;
@@ -138,7 +133,7 @@
 
     .btn {
       border-radius: 5px;
-      width: 100%;
+      min-width: 125px;
       height: 50px;
       background-color: white;
       color: var(--main-color);
