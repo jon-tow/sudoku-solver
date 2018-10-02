@@ -9,15 +9,15 @@
 
   <style>
     :root {
-      --main-color: rgb(0, 102, 255);
+      --main-color: rgb(97, 55, 248);
       --secondary-color: rgb(238, 238, 238);
-      --tertiary-color: rgba(0, 102, 255, 0.514);
+      --tertiary-color: rgba(97, 55, 248, 0.5);
       --text-color: rgb(85, 84, 84);
       --background-color: #F8F8F8;
 
       --inner-shadow: inset 0 0 8px rgba(51, 45, 41, 0.3);
       --outer-shadow: 0 1px 10px rgba(8, 5, 1, 0.6);
-      --grid-border: 2px solid rgb(0, 102, 255);
+      --grid-border: 2px solid rgba(97, 55, 248, 0.5);
     }
 
     html {
@@ -34,12 +34,6 @@
       background-color: white;
     }
 
-    main {
-      height: 100%;
-      display: table-cell;
-      vertical-align: middle;
-    }
-
     button {
       outline: 0;
     }
@@ -47,59 +41,59 @@
     input[type=text] {
       width: 2em;
       height: 1.5em;
-      text-align: center;
-      font-size: 1.2em;
       border: none;
       background-color: transparent;
       padding: 0;
+      text-align: center;
+      font-size: 1.2em;
     }
 
     /* CONTENT STYLE */
     .content {
-      overflow: auto;
+      display: grid;
+      grid-auto-rows: auto;
+      grid-template-areas: ". title-div title-div ."". info-div info-div ."". grid-div grid-div ."". controller-div controller-div .";
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
     /* TITLE STYLE */
     .title-div {
+      grid-area: title-div;
       display: flex;
-      flex-flow: row wrap;
+      flex-direction: row;
       justify-content: center;
-      align-items: flex-start;
-      min-height: 60px;
-      max-height: 60px;
+      align-items: center;
       width: 100%;
     }
 
     /* INFO STYLE */
     .info-div {
+      grid-area: info-div;
       display: flex;
       flex-flow: row wrap;
       justify-content: center;
-      align-items: flex-end;
+      align-items: center;
       width: 100%;
-      min-height: 50px;
-      max-height: 80px;
     }
 
     /* GRID STYLE */
     .grid-div {
+      grid-area: grid-div;
       display: flex;
       flex-flow: column wrap;
       justify-content: center;
       align-items: center;
+      width: 100%;
       border-radius: 4px;
-      min-height: 60px;
-      padding: 2px 5px 2px 5px;
-      margin-right: 2em;
-      margin-left: 2em;
     }
 
     .grid-table {
-      height: 100%;
-      border-spacing: 0;
-      box-shadow: var(--outer-shadow);
       border-radius: 4px;
       border-collapse: collapse;
+      border-spacing: 0;
+      box-shadow: var(--outer-shadow);
     }
 
     .grid-table tr td {
@@ -113,31 +107,28 @@
     .grid-table input:focus {
       outline: none;
       padding: 0px;
-      border-radius: 3px;
       border: 2px solid #4baa70;
+      border-radius: 3px;
       background-color: #e5ffef;
     }
 
     /* CONTROLLER STYLE */
     .controller-div {
+      grid-area: controller-div;
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      min-height: 40px;
-      max-height: 40px;
-      margin-top: 1em;
-      padding-top: .4em;
-      padding-bottom: .6em;
+      width: 100%;
     }
 
     .btn {
-      border-radius: 5px;
       min-width: 125px;
       height: 50px;
+      border: none;
+      border-radius: 5px;
       background-color: white;
       color: var(--main-color);
-      border: none;
       font-size: 1.1em;
       text-transform: uppercase;
     }
@@ -152,24 +143,22 @@
 <body>
 
   <!-- Sudoku Layout. -->
-  <main>
-    <div class='content'>
-      <div class='title-div'>
-        <h1>Sudoku Solver</h1>
-      </div>
-      <div class='info-div' id='info-div'>
-        <p>Fill in the grid with values from 1 to 9</p>
-      </div>
-      <div class='grid-div'>
-        <table class='grid-table' id='grid-table'></table>
-      </div>
-      <div class='controller-div'>
-        <button class='btn' id='reset-btn'>RESET</button>
-        <button class='btn' id='load-btn'>LOAD EXAMPLE</button>
-        <button class='btn' id='solve-btn'>SOLVE</button>
-      </div>
+  <div class='content'>
+    <div class='title-div'>
+      <h1>Sudoku Solver</h1>
     </div>
-  </main>
+    <div class='info-div' id='info-div'>
+      <p>Fill in the grid with values from 1 to 9</p>
+    </div>
+    <div class='grid-div'>
+      <table class='grid-table' id='grid-table'></table>
+    </div>
+    <div class='controller-div'>
+      <button class='btn' id='reset-btn'>RESET</button>
+      <button class='btn' id='load-btn'>LOAD EXAMPLE</button>
+      <button class='btn' id='solve-btn'>SOLVE</button>
+    </div>
+  </div>
 
   <!-- Sudoku Script. -->
   <script>
@@ -232,12 +221,12 @@
       const isBorderTopCell = (i !== 0 && i !== 8) && (i % 3 === 0);
       const isCornerCell = (i === j || i % j === 0 || j % i === 0);
       if (isCornerCell && isBorderLeftCell && isBorderTopCell) {
-        return ('border-top: 3px solid rgb(0, 102, 255);' +
-          'border-left: 3px solid rgb(0, 102, 255);');
+        return ('border-top: 3px solid rgb(97, 55, 248);' +
+          'border-left: 3px solid rgb(97, 55, 248);');
       } else if (isBorderLeftCell) {
-        return 'border-left: 3px solid rgb(0, 102, 255);';
+        return 'border-left: 3px solid rgb(97, 55, 248);';
       } else if (isBorderTopCell) {
-        return 'border-top: 3px solid rgb(0, 102, 255);';
+        return 'border-top: 3px solid rgb(97, 55, 248);';
       }
     }
 
