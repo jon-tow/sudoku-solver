@@ -10,7 +10,7 @@ Pruning decisions:
 Note: Looking to implement look ahead pruning.
 
 ## Screenshot
-![Sudoku Solver](sudoku-solver.png)
+![Sudoku Solver](sudoku-solver.gif)
 
 ## Built with
   * Vanilla-js
