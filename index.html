@@ -189,105 +189,10 @@
     // Global object to store Sudoku game state.
     var uiGridTracker = initGridStruct(); // tracks grid changes from UI
 
-    initSudoku(); // Build the entire applicaiton.
-    /* 
-     * initSudoku() :: void -> void
-     * 
-     * Initializes all necessary data structures and user interface components.     
-     */
+    initSudoku(); // Build the application UI with events for solving.
     function initSudoku() {
-      initGridUI();
       initBtnHandlers();
-    }
-
-    function initGridUI() {
-      let grid = getById('grid-table');
-      for (let i = 0; i < DIMENSION; i++) {
-        let row = createElt('tr');
-        for (let j = 0; j < DIMENSION; j++) {
-          let cell = createElt('td');
-          cell.style = getBorderStyle(i, j);
-          let textBox = createElt('input');
-          textBox.type = 'text';
-          textBox.addEventListener('change', (e) => validateInput(e, i, j));
-          cell.appendChild(textBox);
-          row.appendChild(cell);
-        }
-        grid.appendChild(row);
-      }
-    }
-
-    function getBorderStyle(i, j) {
-      const isBorderLeftCell = (j !== 0 && j !== 8) && (j % 3 === 0);
-      const isBorderTopCell = (i !== 0 && i !== 8) && (i % 3 === 0);
-      const isCornerCell = (i === j || i % j === 0 || j % i === 0);
-      if (isCornerCell && isBorderLeftCell && isBorderTopCell) {
-        return ('border-top: 3px solid rgb(97, 55, 248);' +
-          'border-left: 3px solid rgb(97, 55, 248);');
-      } else if (isBorderLeftCell) {
-        return 'border-left: 3px solid rgb(97, 55, 248);';
-      } else if (isBorderTopCell) {
-        return 'border-top: 3px solid rgb(97, 55, 248);';
-      }
-    }
-
-    function validateInput(e, i, j) {
-      let input = e.target;
-      let val = Number.parseInt(input.value);
-      const isValInRange = (val > 0 & val < 10);
-      const isValTaken = isValUsed(i, j, val, uiGridTracker);
-      if (Number.isNaN(val) || !isValInRange || isValTaken) {
-        uiGridTracker[i][j] = EMPTY;
-        renderInputError(input);
-      } else {
-        uiGridTracker[i][j] = val;
-      }
-    }
-
-    function renderInputError(input) {
-      // Set error alert styles.
-      input.style.border = "2px solid #ff3535";
-      input.style.borderRadius = "3px";
-      input.style.backgroundColor = "#ffeded";
-      wait(500).then(() => {
-        // Reset value and styles.
-        input.value = '';
-        input.style.border = "";
-        input.style.backgroundColor = "";
-      });
-    }
-
-    /*
-     * buildGridFromUI() :: void -> Object
-     * 
-     * Returns a grid object with values filled from
-     * the grid-table textbox input values.
-     */
-    function buildGridFromUI() {
-      let grid = initGridStruct();
-      let gridEl = getById('grid-table');
-      let rows = [...gridEl.childNodes];
-      for (let i = 0; i < rows.length; i++) {
-        let cells = [...rows[i].childNodes];
-        for (let j = 0; j < cells.length; j++) {
-          const cell = cells[j].firstChild; // textbox input element.
-          const val = Number.parseInt(cell.value);
-          grid[i][j] = Number.isNaN(val) ? EMPTY : val;
-        }
-      }
-      return grid;
-    }
-
-    function initGridStruct() {
-      let grid = [];
-      for (let i = 0; i < DIMENSION; i++) {
-        let cells = [];
-        for (let j = 0; j < DIMENSION; j++) {
-          cells[j] = EMPTY;
-        }
-        grid.push(cells);
-      }
-      return grid;
+      initGridUI();
     }
 
     // Handle Button Events.
@@ -566,6 +471,96 @@
       loadBtn.onclick = (e) => {
         renderGridUI(easyTestGrid);
       }
+    }
+
+    function initGridUI() {
+      let grid = getById('grid-table');
+      for (let i = 0; i < DIMENSION; i++) {
+        let row = createElt('tr');
+        for (let j = 0; j < DIMENSION; j++) {
+          let cell = createElt('td');
+          cell.style = getBorderStyle(i, j);
+          let textBox = createElt('input');
+          textBox.type = 'text';
+          textBox.addEventListener('change', (e) => validateInput(e, i, j));
+          cell.appendChild(textBox);
+          row.appendChild(cell);
+        }
+        grid.appendChild(row);
+      }
+    }
+
+    function getBorderStyle(i, j) {
+      const isBorderLeftCell = (j !== 0 && j !== 8) && (j % 3 === 0);
+      const isBorderTopCell = (i !== 0 && i !== 8) && (i % 3 === 0);
+      const isCornerCell = (i === j || i % j === 0 || j % i === 0);
+      if (isCornerCell && isBorderLeftCell && isBorderTopCell) {
+        return ('border-top: 3px solid rgb(97, 55, 248);' +
+          'border-left: 3px solid rgb(97, 55, 248);');
+      } else if (isBorderLeftCell) {
+        return 'border-left: 3px solid rgb(97, 55, 248);';
+      } else if (isBorderTopCell) {
+        return 'border-top: 3px solid rgb(97, 55, 248);';
+      }
+    }
+
+    function validateInput(e, i, j) {
+      let input = e.target;
+      let val = Number.parseInt(input.value);
+      const isValInRange = (val > 0 & val < 10);
+      const isValTaken = isValUsed(i, j, val, uiGridTracker);
+      if (Number.isNaN(val) || !isValInRange || isValTaken) {
+        uiGridTracker[i][j] = EMPTY;
+        renderInputError(input);
+      } else {
+        uiGridTracker[i][j] = val;
+      }
+    }
+
+    function renderInputError(input) {
+      // Set error alert styles.
+      input.style.border = "2px solid #ff3535";
+      input.style.borderRadius = "3px";
+      input.style.backgroundColor = "#ffeded";
+      wait(500).then(() => {
+        // Reset value and styles.
+        input.value = '';
+        input.style.border = "";
+        input.style.backgroundColor = "";
+      });
+    }
+
+    /*
+     * buildGridFromUI() :: void -> Object
+     * 
+     * Returns a grid object with values filled from
+     * the grid-table textbox input values.
+     */
+    function buildGridFromUI() {
+      let grid = initGridStruct();
+      let gridEl = getById('grid-table');
+      let rows = [...gridEl.childNodes];
+      for (let i = 0; i < rows.length; i++) {
+        let cells = [...rows[i].childNodes];
+        for (let j = 0; j < cells.length; j++) {
+          const cell = cells[j].firstChild; // textbox input element.
+          const val = Number.parseInt(cell.value);
+          grid[i][j] = Number.isNaN(val) ? EMPTY : val;
+        }
+      }
+      return grid;
+    }
+
+    function initGridStruct() {
+      let grid = [];
+      for (let i = 0; i < DIMENSION; i++) {
+        let cells = [];
+        for (let j = 0; j < DIMENSION; j++) {
+          cells[j] = EMPTY;
+        }
+        grid.push(cells);
+      }
+      return grid;
     }
 
     // Test Solving Sudoku Grid.
