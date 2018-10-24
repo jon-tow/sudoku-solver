@@ -189,13 +189,13 @@
     // Global object to store Sudoku game state.
     var uiGridTracker = initGridStruct(); // tracks grid changes from UI
 
-    initSudoku(); // Build the application UI with events for solving.
+    // Build the application UI with events for solving.
+    initSudoku();
     function initSudoku() {
       initBtnHandlers();
       initGridUI();
     }
 
-    // Handle Button Events.
     function initBtnHandlers() {
       initSolveBtn();
       initLoadBtn();
@@ -235,11 +235,43 @@
       };
     }
 
+    /*
+     * buildGridFromUI() :: void -> Object
+     * 
+     * Returns a grid object with values filled from
+     * the grid-table textbox input values.
+     */
+    function buildGridFromUI() {
+      let grid = initGridStruct();
+      let gridEl = getById('grid-table');
+      let rows = [...gridEl.childNodes];
+      for (let i = 0; i < rows.length; i++) {
+        let cells = [...rows[i].childNodes];
+        for (let j = 0; j < cells.length; j++) {
+          const cell = cells[j].firstChild; // textbox input element.
+          const val = Number.parseInt(cell.value);
+          grid[i][j] = Number.isNaN(val) ? EMPTY : val;
+        }
+      }
+      return grid;
+    }
+
+    function initGridStruct() {
+      let grid = [];
+      for (let i = 0; i < DIMENSION; i++) {
+        let cells = [];
+        for (let j = 0; j < DIMENSION; j++) {
+          cells[j] = EMPTY;
+        }
+        grid.push(cells);
+      }
+      return grid;
+    }
+
     // *** Sudoku Solving. ***
 
     // Global variable for testing whether sudoku algorithm is finished.
     var isFinished = false;
-
     // solveSudoku(state) :: Object -> void          
     function solveSudoku(state) {
       backtrack([], 0, state);
@@ -442,7 +474,7 @@
       }
     }
 
-    // Helper function rendering a grid structure onto the grid ui.
+    // Translate the grid data struct to UI.
     function renderGridUI(grid) {
       let cells = queryAll('table tr td input');
       let k = 0;
@@ -530,39 +562,6 @@
       });
     }
 
-    /*
-     * buildGridFromUI() :: void -> Object
-     * 
-     * Returns a grid object with values filled from
-     * the grid-table textbox input values.
-     */
-    function buildGridFromUI() {
-      let grid = initGridStruct();
-      let gridEl = getById('grid-table');
-      let rows = [...gridEl.childNodes];
-      for (let i = 0; i < rows.length; i++) {
-        let cells = [...rows[i].childNodes];
-        for (let j = 0; j < cells.length; j++) {
-          const cell = cells[j].firstChild; // textbox input element.
-          const val = Number.parseInt(cell.value);
-          grid[i][j] = Number.isNaN(val) ? EMPTY : val;
-        }
-      }
-      return grid;
-    }
-
-    function initGridStruct() {
-      let grid = [];
-      for (let i = 0; i < DIMENSION; i++) {
-        let cells = [];
-        for (let j = 0; j < DIMENSION; j++) {
-          cells[j] = EMPTY;
-        }
-        grid.push(cells);
-      }
-      return grid;
-    }
-
     // Test Solving Sudoku Grid.
     var easyTestGrid = [
       [EMPTY, EMPTY, EMPTY, 2, 6, EMPTY, 7, EMPTY, 1],
@@ -592,7 +591,7 @@
       [EMPTY, EMPTY, EMPTY, 3, EMPTY, 6, EMPTY, 9, EMPTY],
     ];
 
-    //    testModule(easyTestGrid);
+    // testModule(easyTestGrid);
     function testModule(grid) {
       testNextCell(grid);
       function testNextCell(grid) {
